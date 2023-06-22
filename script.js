@@ -1,5 +1,6 @@
 const inputBox =document.getElementById("input-box");
 const listContainer=document.getElementById("list-container");
+const validation=document.querySelector(".validation");
 
 
 inputBox.addEventListener('keyup', (event) => {
@@ -10,7 +11,8 @@ inputBox.addEventListener('keyup', (event) => {
 
 function addTask(){
     if(inputBox.value ===''){
-        alert("You must write something");
+        // alert("You must write something");
+        validation.classList.add('show')
     }
     else{
         
@@ -24,8 +26,6 @@ function addTask(){
     inputBox.value="";
     saveData();
 }
-
-
 
 
 

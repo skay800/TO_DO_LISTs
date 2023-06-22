@@ -103,3 +103,10 @@ ul li span{
 ul li span:hover{
     background: rgba(255, 0, 0, 0.233);
 }
+.validation{
+    color: red;
+    display: none;
+}
+.show{
+    display: block;
+}
