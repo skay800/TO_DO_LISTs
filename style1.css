@@ -4,11 +4,19 @@
     font-family:'Poppins',sans-serif;
     box-sizing:border-box
 }
+
+
 .container{
     width: 100%;
     min-height:100vh;
     background: #4e085f;
     padding: 10px;
+}
+.list-container{
+    z-index: 1;
+    overflow: auto;
+    height: 400px;
+    position: relative;
 }
 .todo-app{
     width: 100%;
@@ -49,11 +57,22 @@ button{
     border: none;
     outline: none;
     padding: 16px 50px;
-    background: #6aff45;
+    background: green;
     color: #fff;
     font-size: 16px;
     cursor:pointer  ;
     border-radius: 40px;
+}
+.delete{
+    border: none;
+    outline: none;
+    padding: 16px 50px;
+    background: purple;
+    color: #fff;
+    font-size: 16px;
+    cursor:pointer  ;
+    border-radius: 40px;
+    
 }
 
 ul li{
