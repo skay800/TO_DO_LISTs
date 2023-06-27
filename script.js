@@ -1,102 +1,162 @@
-  // Retrieve tasks from local storage or create an empty array
-  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+document.getElementById('form-Task').addEventListener('submit', saveTask);
 
-  // Function to save tasks to local storage
-  function saveTasks() {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+let filter = 'all';
+let editingTaskId = '';
+
+// Save new To-Do
+function saveTask(e) {
+  e.preventDefault();
+
+  let titleInput = document.getElementById('title');
+  let descriptionInput = document.getElementById('description');
+
+  let title = titleInput.value.trim();
+  let description = descriptionInput.value.trim();
+
+  if (title === '' || description === '') {
+    showError('Please enter both a title and description');
+    return;
   }
 
-  // Function to render tasks
-  function renderTasks() {
-    const taskList = document.getElementById('task-list');
-    const filterRadio = document.querySelector('input[name="filter"]:checked');
-    const filter = filterRadio ? filterRadio.value : 'all';
-
-    taskList.innerHTML = '';
-
-    tasks.forEach((task, index) => {
-      if (filter === 'all' || (filter === 'done' && task.done) || (filter === 'undone' && !task.done)) {
-        const taskItem = document.createElement('li');
-        taskItem.className = 'task-item' + (task.done ? ' done' : '');
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = task.done;
-        checkbox.addEventListener('change', () => {
-          task.done = checkbox.checked;
-          saveTasks();
-          renderTasks();
-        });
-
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.value = task.text;
-        input.addEventListener('change', () => {
-          task.text = input.value;
-          saveTasks();
-        });
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.addEventListener('click', () => {
-          tasks.splice(index, 1);
-          saveTasks();
-          renderTasks();
-        });
-
-        taskItem.appendChild(checkbox);
-        taskItem.appendChild(input);
-        taskItem.appendChild(deleteButton);
-        taskList.appendChild(taskItem);
+  if (editingTaskId !== '') {
+    // Editing an existing task
+    tasks = tasks.map(task => {
+      if (task.id === editingTaskId) {
+        return {
+          ...task,
+          title,
+          description
+        };
       }
+      return task;
     });
+    editingTaskId = '';
+  } else {
+    // Creating a new task
+    let task = {
+      id: Date.now().toString(),
+      title,
+      description,
+      done: false
+    };
+    tasks.push(task);
   }
 
- // Function to display an error message
-function displayErrorMessage(message) {
-const errorMessage = document.getElementById('error-message');
-errorMessage.textContent = message;
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 
-if (message !== '') {
-  setTimeout(() => {
-    errorMessage.textContent = '';
-  }, 3000); // Delay in milliseconds (3 seconds in this case)
-}
-}
-
-  // Function to add a new task
-  function addTask() {
-    const input = document.getElementById('new-task-input');
-    const text = input.value.trim();
-
-    if (text !== '') {
-      tasks.push({ text, done: false });
-      saveTasks();
-      input.value = '';
-      renderTasks();
-      displayErrorMessage(''); // Clear any previous error message
-    } else {
-      displayErrorMessage('You must enter a task'); // Display the error message
-    }
-  }
-
-  // Event listener for add task button
-  const addTaskBtn = document.getElementById('add-task-btn');
-  addTaskBtn.addEventListener('click', addTask);
-
-  // Event listener for enter key press in the input field
-  const newTaskInput = document.getElementById('new-task-input');
-  newTaskInput.addEventListener('keyup', (event) => {
-    if (event.keyCode === 13) {
-      addTask();
-    }
-  });
-
-  // Event listener for filter change
-  const filterRadios = document.querySelectorAll('input[name="filter"]');
-  filterRadios.forEach((radio) => {
-    radio.addEventListener('change', renderTasks);
-  });
-
-  // Initial rendering of tasks
   renderTasks();
+  titleInput.value = '';
+  descriptionInput.value = '';
+}
+
+// Delete To-Do
+function deleteTask(id) {
+  tasks = tasks.filter(task => task.id !== id);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+  renderTasks();
+}
+
+// Toggle task done status
+function toggleTaskDone(id) {
+  tasks = tasks.map(task => {
+    if (task.id === id) {
+      return {
+        ...task,
+        done: !task.done
+      };
+    }
+    return task;
+  });
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+  renderTasks();
+}
+
+// Edit task
+function editTask(id) {
+  let task = tasks.find(task => task.id === id);
+  let titleInput = document.getElementById('title');
+  let descriptionInput = document.getElementById('description');
+
+  titleInput.value = task.title;
+  descriptionInput.value = task.description;
+
+  editingTaskId = id;
+}
+
+// Filter tasks
+function setFilter(value) {
+  filter = value;
+  renderTasks();
+}
+
+// Show error message
+function showError(message) {
+  let errorDiv = document.createElement('div');
+  errorDiv.className = 'error';
+  errorDiv.textContent = message;
+
+  document.body.insertBefore(errorDiv, document.querySelector('.container'));
+
+  setTimeout(() => {
+    errorDiv.remove();
+  }, 4000);
+}
+
+// Render tasks
+function renderTasks() {
+  let tasksView = document.getElementById('tasks');
+  tasksView.innerHTML = '';
+
+  let filteredTasks = tasks;
+
+  if (filter === 'done') {
+    filteredTasks = tasks.filter(task => task.done);
+  } else if (filter === 'undone') {
+    filteredTasks = tasks.filter(task => !task.done);
+  }
+
+  for (let i = 0; i < filteredTasks.length; i++) {
+    let task = filteredTasks[i];
+    let taskElement = document.createElement('div');
+    taskElement.className = 'task';
+
+    let titleElement = document.createElement('h3');
+    titleElement.className = 'task-title';
+    titleElement.textContent = task.title;
+
+    let descriptionElement = document.createElement('p');
+    descriptionElement.className = 'task-description';
+    descriptionElement.textContent = task.description;
+
+    let buttonsDiv = document.createElement('div');
+    buttonsDiv.className = 'task-buttons';
+
+    let doneButton = document.createElement('button');
+    doneButton.textContent = 'Done';
+    doneButton.className = 'btn btn-success';
+    doneButton.addEventListener('click', () => toggleTaskDone(task.id));
+
+    let editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.className = 'btn btn-primary';
+    editButton.addEventListener('click', () => editTask(task.id));
+
+    let deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.className = 'btn btn-danger';
+    deleteButton.addEventListener('click', () => deleteTask(task.id));
+
+    buttonsDiv.appendChild(doneButton);
+    buttonsDiv.appendChild(editButton);
+    buttonsDiv.appendChild(deleteButton);
+
+    taskElement.appendChild(titleElement);
+    taskElement.appendChild(descriptionElement);
+    taskElement.appendChild(buttonsDiv);
+
+    tasksView.appendChild(taskElement);
+  }
+}
+
+renderTasks();
