@@ -1,86 +1,83 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+ 
+}
 body {
-    background-color: #f1f1f1;
-    font-family: Arial, sans-serif;
-  }
-  
-  h1 {
-    color: #551a8b; /* Purple */
-    text-align: center;
-  }
-  
-  #new-task-input {
-    width: 300px;
-    padding: 8px;
-    font-size: 16px;
-  }
-  
-  #add-task-btn {
-    padding: 8px 16px;
-    font-size: 16px;
-    background-color: #008000; /* Green */
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  #add-task-btn:hover {
-    background-color: #006400; /* Darker Green */
-  }
-  
-  ul.task-list {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .task-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    background-color: #fff;
-    padding: 8px;
-    border-radius: 4px;
-  }
-  
-  .task-item.done {
-    background-color: #e6e6e6;
-  }
-  
-  .task-item input[type="checkbox"] {
-    margin-right: 10px;
-  }
-  
-  .task-item input[type="text"] {
-    flex-grow: 1;
-    border: none;
-    outline: none;
-    font-size: 16px;
-  }
-  
-  .task-item button {
-    margin-left: 10px;
-    padding: 4px 8px;
-    background-color: #551a8b; /* Purple */
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .task-item button:hover {
-    background-color: #4b167a; /* Darker Purple */
-  }
-  
-  input[type="radio"] {
-    margin-right: 5px;
-  }
-  
-  label {
-    color: #551a8b; /* Purple */
-    font-weight: bold;
-  }
-  
-  #error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
-  }
+ 
+background: url(./img/ground.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+.title {
+  color: #663399;
+  text-align: center;
+}
+
+.form-container {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #663399;
+  border-radius: 5px;
+}
+
+.btn {
+  background-color: #663399;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-success {
+  background-color: #008000;
+  margin-left: 10px;
+}
+
+.task {
+  margin-bottom: 10px;
+  border: 1px solid #663399;
+  border-radius: 5px;
+  padding: 10px;
+}
+.task-done {
+  background-color: #e0e0e0;
+  text-decoration: line-through;
+}
+
+
+.task-title {
+  font-weight: bold;
+  color: #663399;
+}
+
+.task-description {
+  color: #008000;
+}
+
+.task-buttons {
+  margin-top: 5px;
+}
+
+.task-buttons button {
+  background-color: #663399;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.task-buttons .btn-danger {
+  background-color: #FF0000;
+}
